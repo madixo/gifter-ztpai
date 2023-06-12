@@ -1,0 +1,27 @@
+.panel {
+    padding: 2rem 2rem;
+    // max-width: 1500px;
+    // margin: 0 auto;
+    // width: 100%;
+
+}
+
+.panel-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.panel-title {}
+
+.panel-main {
+    margin: 1.5rem 0 0;
+}
+
+.panel-actions ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.65rem;
+}

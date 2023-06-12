@@ -1,0 +1,58 @@
+$table-border-color: #E0E0E0;
+$table-action-color: #424242;
+
+.table {
+    border: 1px solid $table-border-color;
+    border-radius: 10px;
+}
+
+.table-row {
+    display: flex;
+    flex-direction: row;
+
+    &+.table-row {
+        border-top: 1px solid $table-border-color;
+    }
+}
+
+.table-col {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    font-size: 1.25rem;
+    justify-content: center;
+
+    &:not(.table-actions):not(.table-checkbox-cell) {
+        width: 100%;
+    }
+}
+
+.table-actions {
+    display: flex;
+    flex-direction: row;
+
+    button {
+        border-radius: 0;
+    }
+
+    .table-col {
+        padding: 0.75rem;
+    }
+
+    .table-col:not(:first-child) button {
+        border-left: 1px solid $table-border-color;
+        padding-left: 1.5rem;
+    }
+}
+
+.table-action {
+    color: $table-action-color;
+}
+
+.table-checkbox-cell {
+    padding: 0 1rem 0 2rem;
+
+    &>input[type="checkbox"] {
+        padding: 0.65rem;
+    }
+}
