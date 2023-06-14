@@ -11,12 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var User_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
-const Contributions_1 = __importDefault(require("./Contributions"));
+const Contribution_1 = __importDefault(require("./Contribution"));
+const Gift_1 = __importDefault(require("./Gift"));
+const List_1 = __importDefault(require("./List"));
 const Role_1 = __importDefault(require("./Role"));
-let User = User_1 = class User extends sequelize_typescript_1.Model {
+let User = class User extends sequelize_typescript_1.Model {
 };
 __decorate([
     sequelize_typescript_1.AutoIncrement,
@@ -42,14 +43,31 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "roleId", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => Role_1.default),
+    (0, sequelize_typescript_1.BelongsTo)(() => Role_1.default, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    }),
     __metadata("design:type", Role_1.default)
 ], User.prototype, "role", void 0);
 __decorate([
-    (0, sequelize_typescript_1.BelongsToMany)(() => User_1, () => Contributions_1.default),
-    __metadata("design:type", Contributions_1.default)
+    (0, sequelize_typescript_1.HasMany)(() => List_1.default, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    }),
+    __metadata("design:type", List_1.default)
+], User.prototype, "list", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => Gift_1.default, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    }),
+    __metadata("design:type", Array)
+], User.prototype, "takenGifts", void 0);
+__decorate([
+    (0, sequelize_typescript_1.BelongsToMany)(() => List_1.default, () => Contribution_1.default),
+    __metadata("design:type", Array)
 ], User.prototype, "contributions", void 0);
-User = User_1 = __decorate([
+User = __decorate([
     sequelize_typescript_1.Table
 ], User);
 exports.default = User;

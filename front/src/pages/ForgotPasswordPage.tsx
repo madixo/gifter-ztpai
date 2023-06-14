@@ -1,8 +1,0 @@
-import ForgotPasswordPanel from "../panels/ForgotPasswordPanel";
-import SplitView from "../views/SplitView";
-
-export default function ForgotPasswordPage() {
-    return (
-        <SplitView><ForgotPasswordPanel /></SplitView>
-    );
-}

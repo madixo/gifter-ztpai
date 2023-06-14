@@ -1,5 +1,5 @@
 import pgPool from "../database/PGPool";
-import IController from "./IController";
+import IController from "./Controller";
 
 export default <IController>{
     async get(req, res) {

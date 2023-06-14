@@ -1,13 +1,13 @@
-import { useCallback, useState } from "react";
+import {useCallback, useState} from "react";
 
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 
-import { useList } from "api/useList";
+import {useGifts} from "api/useGifts";
 import Badge from 'components/common/Badge/Badge';
 import Button from "components/common/Button/Button";
 import Panel from "components/common/Panel/Panel";
-import Table, { TableActionOnClick, TableDataItemValue, TableDataRow, TableOnRowSelect } from "components/common/Table/Table";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import Table, {TableActionOnClick, TableDataItemValue, TableDataRow, TableOnRowSelect} from "components/common/Table/Table";
+import {FaPlus, FaTrash} from "react-icons/fa";
 
 export default function ListEditPanel() {
   const [selectedRows, setSelectedRows] = useState<TableDataRow[]>();
@@ -16,7 +16,7 @@ export default function ListEditPanel() {
     id: string;
   };
   const {id} = useParams<ParamsType>();
-  const [data, loading, error] = useList({id});
+  const [data, loading, error] = useGifts({id});
 
   const removeSelectedItems = () => {
     console.log("Remove selected: ", selectedRows);

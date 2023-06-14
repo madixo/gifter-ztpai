@@ -1,8 +1,10 @@
 import {Router} from 'express';
 import ContributionsController from '../controllers/ContributionsController';
-import GiftListsController from '../controllers/GiftListsController';
+import ForgotPasswordController from '../controllers/ForgotPasswordController';
+import GiftsController from '../controllers/GiftsController';
 import ListsController from '../controllers/ListsController';
 import LoginController from '../controllers/LoginController';
+import PasswordResetController from '../controllers/PasswordResetController';
 import RegisterController from '../controllers/RegisterController';
 
 const router = Router();
@@ -15,16 +17,18 @@ router.post('/register', RegisterController.post);
 
 router.post('/login', LoginController.post);
 
-router.get('/list/:id', GiftListsController.get);
+router.get('/list/:id', GiftsController.get);
 
-router.delete('/list/:id', GiftListsController.delete);
+router.delete('/list/:id', ListsController.delete);
 
-router.post('/list', GiftListsController.post);
+router.post('/list', ListsController.post);
 
-router.patch('/list/:id', GiftListsController.patch)
+router.delete('/lists', ListsController.delete);
 
-router.get('/cookie', (req, res) => {
-    res.status(200).json({'signed': req.signedCookies, 'cookies': req.cookies});
-});
+router.patch('/list/:id', ListsController.patch);
+
+router.post('/forgot-password', ForgotPasswordController.post);
+
+router.post('/password-reset', PasswordResetController.post);
 
 export default router;

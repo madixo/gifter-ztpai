@@ -1,6 +1,8 @@
 import {Optional} from "sequelize";
-import {AllowNull, AutoIncrement, BelongsTo, BelongsToMany, Column, DataType, Default, ForeignKey, Model, PrimaryKey, Table, Unique} from "sequelize-typescript";
-import Contributions from "./Contributions";
+import {AllowNull, AutoIncrement, BelongsTo, BelongsToMany, Column, DataType, Default, ForeignKey, HasMany, Model, PrimaryKey, Table, Unique} from "sequelize-typescript";
+import Contribution from "./Contribution";
+import Gift from "./Gift";
+import List from "./List";
 import Role from "./Role";
 
 interface UserAttributes {
@@ -9,7 +11,7 @@ interface UserAttributes {
     password: string;
     roleId: number;
     role: Role;
-    contributions: Contributions;
+    contributions: List[];
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'roleId' | 'role' | 'contributions'> {}
@@ -35,9 +37,24 @@ export default class User extends Model<UserAttributes, UserCreationAttributes> 
     @Column(DataType.BIGINT)
     roleId: number;
 
-    @BelongsTo(() => Role)
+    @BelongsTo(() => Role, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     role: Role;
 
-    @BelongsToMany(() => User, () => Contributions)
-    contributions: Contributions;
+    @HasMany(() => List, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
+    list: List;
+
+    @HasMany(() => Gift, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
+    takenGifts: Gift[];
+
+    @BelongsToMany(() => List, () => Contribution)
+    contributions: List[];
 }

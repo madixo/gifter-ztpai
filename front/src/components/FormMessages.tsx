@@ -1,12 +1,11 @@
 import FormMessage from "./FormMessage";
 
-export interface MessagesProps {
+export interface FormMessagesProps {
     message?: string;
     error?: string;
 }
 
-export default function FormMessages({message, error}: MessagesProps) {
-
+export default function FormMessages({message, error}: FormMessagesProps) {
     return(
         <div className="messages">
             {
@@ -19,5 +18,4 @@ export default function FormMessages({message, error}: MessagesProps) {
             }
         </div>
     );
-
 };

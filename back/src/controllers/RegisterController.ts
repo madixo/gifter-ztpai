@@ -1,6 +1,9 @@
 import * as argon from "argon2";
+import {Request, Response} from "express";
+import {ParamsDictionary} from "express-serve-static-core";
+import {ParsedQs} from "qs";
 import User from "../database/models/User";
-import IController from "./IController";
+import Controller from "./Controller";
 
 interface RegisterData {
     email: string;
@@ -8,8 +11,9 @@ interface RegisterData {
     tou: string;
 }
 
-export default <IController>{
-    async post(req, res) {
+class RegisterController extends Controller {
+    async post(req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: Response<any, Record<string, any>>): Promise<void> {
+
         let data: RegisterData = req.body;
         let hash = await argon.hash(data.password);
         try {
@@ -28,3 +32,5 @@ export default <IController>{
         }
     }
 }
+
+export default new RegisterController();

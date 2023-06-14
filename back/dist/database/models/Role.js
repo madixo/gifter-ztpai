@@ -8,8 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
+const User_1 = __importDefault(require("./User"));
 let Role = class Role extends sequelize_typescript_1.Model {
 };
 __decorate([
@@ -23,6 +27,13 @@ __decorate([
     (0, sequelize_typescript_1.Column)(sequelize_typescript_1.DataType.TEXT),
     __metadata("design:type", String)
 ], Role.prototype, "name", void 0);
+__decorate([
+    (0, sequelize_typescript_1.HasMany)(() => User_1.default, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    }),
+    __metadata("design:type", Array)
+], Role.prototype, "users", void 0);
 Role = __decorate([
     sequelize_typescript_1.Table
 ], Role);

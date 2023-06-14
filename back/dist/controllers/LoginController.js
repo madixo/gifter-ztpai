@@ -37,26 +37,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const argon = __importStar(require("argon2"));
 const jwt = __importStar(require("jsonwebtoken"));
+const Role_1 = __importDefault(require("../database/models/Role"));
 const User_1 = __importDefault(require("../database/models/User"));
-exports.default = {
+const Controller_1 = __importDefault(require("./Controller"));
+class LoginController extends Controller_1.default {
     post(req, res) {
+        const _super = Object.create(null, {
+            internalServerError: { get: () => super.internalServerError }
+        });
         return __awaiter(this, void 0, void 0, function* () {
             const data = req.body;
             try {
-                const user = yield User_1.default.findOne({ where: { email: data.email } });
+                const user = yield User_1.default.findOne({ where: { email: data.email }, include: Role_1.default });
                 if (user == null) {
                     res.status(200).json({ status: 'error', message: 'Email lub hasło nieprawidłowe!' });
                     return;
                 }
                 if (yield argon.verify(user.password, data.password))
-                    res.status(200).json({ status: 'ok', message: 'Pomyślnie zalogowano!', token: jwt.sign(user.id.toString(), process.env.SECRET) });
+                    res.status(200).json({
+                        status: 'ok',
+                        message: 'Pomyślnie zalogowano!',
+                        token: jwt.sign({
+                            email: user.email,
+                            role: user.role.name
+                        }, process.env.SECRET, {
+                            subject: user.id.toString()
+                        })
+                    });
                 else
                     res.status(200).json({ status: 'error', message: 'Email lub hasło nieprawidłowe!' });
             }
             catch (err) {
-                console.log(err);
-                res.status(500).json({ status: 'error', message: 'Internal server error!' });
+                _super.internalServerError.call(this, err, res);
             }
         });
     }
-};
+}
+;
+exports.default = new LoginController();

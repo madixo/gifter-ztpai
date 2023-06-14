@@ -37,7 +37,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const argon = __importStar(require("argon2"));
 const User_1 = __importDefault(require("../database/models/User"));
-exports.default = {
+const Controller_1 = __importDefault(require("./Controller"));
+class RegisterController extends Controller_1.default {
     post(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let data = req.body;
@@ -54,4 +55,5 @@ exports.default = {
             }
         });
     }
-};
+}
+exports.default = new RegisterController();

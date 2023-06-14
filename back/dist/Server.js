@@ -44,6 +44,7 @@ require("process");
 const db_1 = __importDefault(require("./database/db"));
 const Gift_1 = __importDefault(require("./database/models/Gift"));
 const List_1 = __importDefault(require("./database/models/List"));
+const PasswordReset_1 = __importDefault(require("./database/models/PasswordReset"));
 const Role_1 = __importDefault(require("./database/models/Role"));
 const User_1 = __importDefault(require("./database/models/User"));
 const ApiRoute_1 = __importDefault(require("./routes/ApiRoute"));
@@ -55,22 +56,28 @@ db_1.default.sync({ force: true }).then(() => __awaiter(void 0, void 0, void 0, 
     yield Role_1.default.create({ name: 'Admin' });
     yield Role_1.default.create({ name: 'User' });
     yield Role_1.default.create({ name: 'Anon' });
-    let user = yield User_1.default.create({ email: 'admin@gifter.pl', password: yield argon.hash('Alamakota1!') });
-    let list = yield List_1.default.create({ name: 'Andrzejki', access_code: 123123, ownerId: user.id });
-    yield Gift_1.default.bulkCreate([
-        { name: 'Telewizor', image: 'http', list_id: list.id },
-        { name: 'Telewizor', image: 'http', list_id: list.id },
-        { name: 'Telewizor', image: 'http', list_id: list.id },
-        { name: 'Telewizor', image: 'http', list_id: list.id },
+    let users = yield User_1.default.bulkCreate([
+        { email: 'admin@gifter.pl', password: yield argon.hash('Alamakota1!') },
+        { email: 'user@gifter.pl', password: yield argon.hash('Alamakota1!') }
     ]);
-    list = yield List_1.default.create({ name: 'Mikolajki', access_code: 321321, ownerId: user.id });
-    yield Gift_1.default.bulkCreate([
-        { name: 'Mikrofala', image: 'http', list_id: list.id },
-        { name: 'Mikrofala', image: 'http', list_id: list.id },
-        { name: 'Mikrofala', image: 'http', list_id: list.id },
-        { name: 'Mikrofala', image: 'http', list_id: list.id },
-        { name: 'Mikrofala', image: 'http', list_id: list.id },
+    let lists = yield List_1.default.bulkCreate([
+        { name: 'Andrzejki', accessCode: 123123, ownerId: users[0].id },
+        { name: 'Mikolajki', accessCode: 321321, ownerId: users[1].id }
     ]);
+    yield Gift_1.default.bulkCreate([
+        { name: 'Telewizor', image: 'http', listId: lists[0].id },
+        { name: 'Telewizor', image: 'http', listId: lists[0].id },
+        { name: 'Telewizor', image: 'http', listId: lists[0].id },
+        { name: 'Telewizor', image: 'http', listId: lists[0].id },
+        { name: 'Mikrofala', image: 'http', listId: lists[1].id },
+        { name: 'Mikrofala', image: 'http', listId: lists[1].id },
+        { name: 'Mikrofala', image: 'http', listId: lists[1].id },
+        { name: 'Mikrofala', image: 'http', listId: lists[1].id },
+        { name: 'Mikrofala', image: 'http', listId: lists[1].id },
+    ]);
+    yield PasswordReset_1.default.create({
+        userId: users[0].id
+    });
 }));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({ origin: 'http://localhost:3000', credentials: true }));

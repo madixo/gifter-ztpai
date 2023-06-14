@@ -1,18 +1,19 @@
 import {Optional} from "sequelize";
-import {AllowNull, AutoIncrement, BelongsTo, BelongsToMany, Column, DataType, ForeignKey, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {AllowNull, AutoIncrement, BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table} from "sequelize-typescript";
 import User from "../models/User";
-import Contributions from "./Contributions";
+import Contribution from "./Contribution";
+import Gift from "./Gift";
 
 interface ListAttributes {
     id: number;
     name: string;
-    access_code: number;
+    accessCode: number;
     ownerId: number;
     owner: User;
-    contributions: Contributions;
+    contributors: Contribution[];
 }
 
-interface ListCreationAttributes extends Optional<ListAttributes, 'id' | 'owner' | 'contributions'> {}
+interface ListCreationAttributes extends Optional<ListAttributes, 'id' | 'owner' | 'contributors'> {}
 
 @Table
 export default class List extends Model<ListAttributes, ListCreationAttributes> {
@@ -27,16 +28,28 @@ export default class List extends Model<ListAttributes, ListCreationAttributes> 
 
     @AllowNull(false)
     @Column
-    access_code: number;
+    accessCode: number;
 
     @AllowNull(false)
     @ForeignKey(() => User)
-    @Column(DataType.BIGINT)
+    @Column({
+        type: DataType.BIGINT,
+        onDelete: 'CASCADE'
+    })
     ownerId: number;
 
-    @BelongsTo(() => User)
+    @BelongsTo(() => User, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     owner: User;
 
-    @BelongsToMany(() => List, () => Contributions)
-    contributions: Contributions;
+    @HasMany(() => Gift, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
+    gifts: Gift[];
+
+    @BelongsToMany(() => User, () => Contribution)
+    contributors: User[];
 }

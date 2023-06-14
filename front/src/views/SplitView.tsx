@@ -1,14 +1,12 @@
-import { ReactNode } from "react";
+import {ReactNode} from "react";
 import './SplitView.css';
-
-interface Props {
+interface SplitViewProps {
     children: ReactNode
 }
 
-export default function SplitView({children}: Props) {
+export default function SplitView({children}: SplitViewProps) {
 
     return (
-
         <main id="split">
             <div className="side-panel">
                 <div className="icons">
@@ -21,8 +19,5 @@ export default function SplitView({children}: Props) {
                 {children}
             </div>
         </main>
-
-
     );
-
 }

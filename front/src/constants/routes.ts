@@ -7,6 +7,7 @@ export const routes = {
     SETTINGS: '/settings',
     USER_PROFILE: '/user',
     LIST_EDIT: '/list/:id/edit',
-    LIST: '/list/:id',
-    WILDCARD: '*',
+    LIST_VIEW: '/list/:id',
+    PASSWORD_RESET: '/password-reset',
+    WILDCARD: '*'
 } satisfies Record<string, string>;

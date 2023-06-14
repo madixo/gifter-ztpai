@@ -7,6 +7,7 @@ import 'process';
 import connection from './database/db';
 import Gift from './database/models/Gift';
 import List from './database/models/List';
+import PasswordReset from './database/models/PasswordReset';
 import Role from './database/models/Role';
 import User from './database/models/User';
 import apiRoutes from './routes/ApiRoute';
@@ -23,22 +24,28 @@ connection.sync({force: true}).then(async () => {
     await Role.create({name: 'Admin'});
     await Role.create({name: 'User'});
     await Role.create({name: 'Anon'});
-    let user = await User.create({email: 'admin@gifter.pl', password: await argon.hash('Alamakota1!')});
-    let list = await List.create({name: 'Andrzejki', access_code: 123123, ownerId: user.id});
-    await Gift.bulkCreate([
-        {name: 'Telewizor', image: 'http', list_id: list.id},
-        {name: 'Telewizor', image: 'http', list_id: list.id},
-        {name: 'Telewizor', image: 'http', list_id: list.id},
-        {name: 'Telewizor', image: 'http', list_id: list.id},
+    let users = await User.bulkCreate([
+        {email: 'admin@gifter.pl', password: await argon.hash('Alamakota1!')},
+        {email: 'user@gifter.pl', password: await argon.hash('Alamakota1!')}
     ]);
-    list = await List.create({name: 'Mikolajki', access_code: 321321, ownerId: user.id});
-    await Gift.bulkCreate([
-        {name: 'Mikrofala', image: 'http', list_id: list.id},
-        {name: 'Mikrofala', image: 'http', list_id: list.id},
-        {name: 'Mikrofala', image: 'http', list_id: list.id},
-        {name: 'Mikrofala', image: 'http', list_id: list.id},
-        {name: 'Mikrofala', image: 'http', list_id: list.id},
+    let lists = await List.bulkCreate([
+        {name: 'Andrzejki', accessCode: 123123, ownerId: users[0].id},
+        {name: 'Mikolajki', accessCode: 321321, ownerId: users[1].id}
     ]);
+    await Gift.bulkCreate([
+        {name: 'Telewizor', image: 'http', listId: lists[0].id},
+        {name: 'Telewizor', image: 'http', listId: lists[0].id},
+        {name: 'Telewizor', image: 'http', listId: lists[0].id},
+        {name: 'Telewizor', image: 'http', listId: lists[0].id},
+        {name: 'Mikrofala', image: 'http', listId: lists[1].id},
+        {name: 'Mikrofala', image: 'http', listId: lists[1].id},
+        {name: 'Mikrofala', image: 'http', listId: lists[1].id},
+        {name: 'Mikrofala', image: 'http', listId: lists[1].id},
+        {name: 'Mikrofala', image: 'http', listId: lists[1].id},
+    ]);
+    await PasswordReset.create({
+        userId: users[0].id
+    });
 });
 
 

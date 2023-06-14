@@ -5,16 +5,17 @@ import User from "./User";
 
 interface GiftAttributes {
     id: number;
-    list_id: number;
+    listId: number;
+    list: List;
     name: string;
     image: string;
     price: number;
     description: string;
-    taken_by_id: number;
-    taken_by: User;
+    takenById: number;
+    takenBy: User;
 }
 
-interface GiftCreationAttributes extends Optional<GiftAttributes, 'id' | 'description' | 'price' | 'taken_by' | 'taken_by_id'> {}
+interface GiftCreationAttributes extends Optional<GiftAttributes, 'id' | 'list' | 'description' | 'price' | 'takenBy' | 'takenById'> {}
 
 @Table
 export default class Gift extends Model<GiftAttributes, GiftCreationAttributes> {
@@ -25,8 +26,14 @@ export default class Gift extends Model<GiftAttributes, GiftCreationAttributes> 
 
     @AllowNull(false)
     @ForeignKey(() => List)
-    @Column(DataType.BIGINT)
-    list_id: number;
+    @Column({
+        type: DataType.BIGINT,
+        onDelete: 'CASCADE'
+    })
+    listId: number;
+
+    @BelongsTo(() => List)
+    list: List;
 
     @AllowNull(false)
     @Column(DataType.TEXT)
@@ -43,12 +50,15 @@ export default class Gift extends Model<GiftAttributes, GiftCreationAttributes> 
     description: string;
 
     @ForeignKey(() => User)
-    @Column(DataType.BIGINT)
-    taken_by_id: number;
+    @Column({
+        type: DataType.BIGINT,
+        onDelete: 'CASCADE'
+    })
+    takenById: number;
 
-    @BelongsTo(() => User)
-    taken_by: User;
-
-    @BelongsTo(() => List)
-    list: List;
+    @BelongsTo(() => User, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
+    takenBy: User;
 }
